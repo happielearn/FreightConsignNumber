@@ -1,0 +1,26 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'org.example.Main'
+    }
+    baseName = project.name + '-all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.0.RELEASE'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.0.0.RELEASE'
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.0.Final'
+}
